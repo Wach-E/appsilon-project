@@ -12,7 +12,7 @@
         timeout: 100
       vars:
         ansible_connection: local
-        ansible_python_interpreter: /home/wach/.pyenv/shims/python3
+        ansible_python_interpreter: /home/wach/.pyenv/shims/python3 # this should change based on your machine python3 location
 - name: User creation
   hosts: all
   become: yes
