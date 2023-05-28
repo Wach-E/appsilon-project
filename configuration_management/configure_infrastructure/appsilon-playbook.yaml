@@ -1,0 +1,99 @@
+---
+- name: Wait for remote ssh connection
+  hosts: all
+  gather_facts: False
+  tasks:
+    - name: Wait for open ssh port
+      ansible.builtin.wait_for:
+        port: 22
+        host: "{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}"
+        search_regex: OpenSSH
+        delay: 10
+        timeout: 100
+      vars:
+        ansible_connection: local
+        ansible_python_interpreter: /home/wach/.pyenv/shims/python3
+- name: User creation
+  hosts: all
+  become: yes
+  tasks:
+    - name: Copy nice-script.sh
+      ansible.builtin.copy:
+        src: nice-script.sh
+        dest: /etc/skel/
+        mode: "0744"
+    - name: Grant passwordless sudo usage for sudo group
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: "^%sudo"
+        line: "%sudo ALL=(ALL) NOPASSWD: ALL"
+        validate: "visudo -cf %s"
+    - name: Create better-place directory
+      ansible.builtin.file:
+        path: /better-place
+        state: directory
+        mode: "0755"
+    - name: Create user John
+      ansible.builtin.user:
+        name: john
+        comment: John Appsilon
+        uid: 1234
+        group: sudo
+        groups: ""
+        shell: /bin/bash
+        home: /better-place/john # Defaults to /better-place/<username>
+
+- name: Installation of Linux packages
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update the apt package index
+      become: yes
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+    - name: Install linux packages
+      ansible.builtin.apt:
+        name: "{{item}}"
+        state: latest
+        update_cache: yes
+      loop:
+        - tmux
+        - vim
+
+- name: Install Terraform CLI
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install dependency packages
+      ansible.builtin.apt:
+        name: "{{item}}"
+        force_apt_get: yes
+        state: latest
+        update_cache: yes
+      loop:
+        - curl
+        - gnupg
+        - software-properties-common
+        - wget
+    - name: Add Apt signing key from official hashicorp repo
+      ansible.builtin.apt_key:
+        url: https://apt.releases.hashicorp.com/gpg
+        state: present
+    - name: Add official apt_repository for Debain focal
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64] https://apt.releases.hashicorp.com focal main
+        state: present
+    - name: Unpdate cache
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+    - name: install terraform
+      ansible.builtin.apt:
+        name: terraform
+        state: latest
