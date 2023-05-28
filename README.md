@@ -63,22 +63,22 @@ This repository contains the codes to the solution of the [containers](https://g
 ```
 
 ### Containers
-Application (Language/Framework): **TechTrend (Python/Flask)**
-Container Technology: **Docker**
-CI/CD: **GitHub Actions**
-Highlevel takeaways:
-- Crossplatform image build with buildx
-- Docker image tag follows semantic versioning [SemVer Runner](https://github.com/marketplace/actions/git-semantic-version)
-- Build trigger on push (to main) and schedule (Saturday, 7pm UTC)
+- Application (Language/Framework): **TechTrend (Python/Flask)**
+- Container Technology: **Docker**
+- CI/CD: **GitHub Actions**
+- Highlevel takeaways:
+    - Crossplatform image build with buildx
+    - Docker image tag follows semantic versioning [SemVer Runner](https://github.com/marketplace/actions/git-semantic-version)
+    - Build trigger on push (to main) and schedule (Saturday, 7pm UTC)
 
 ### Configuration Management
-Infrastructure-as-Code: **Terraform**
-Configuration Management: **Ansible**
-Cloud: **AWS**
-Control Node: **Ubuntu 22.04**
-Highlevel takeaways:
-- Remote Backend Config
-- Remote node created with local keypair using terraform
-- Remote node SSH inbound restricted to network of control node only.
+- Infrastructure-as-Code: **Terraform**
+- Configuration Management: **Ansible**
+- Cloud: **AWS**
+- Control Node: **Ubuntu 22.04**
+- Highlevel takeaways:
+    - Remote Backend Config
+    - Remote node created with local keypair using terraform
+    - Remote node SSH inbound restricted to network of control node only.
 
 
