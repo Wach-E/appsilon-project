@@ -20,6 +20,13 @@ COPY ./ /app/
 # Initialize db    
 RUN python3 init_db.py
 
+# Setup runtime user
+RUN useradd -m appuser
+
+RUN chown -R appuser:appuser /app
+
+USER appuser
+
 # Expose container port
 EXPOSE 3000
 
