@@ -5,6 +5,9 @@ name: Techtrend webapp CI
 on:
   push:
     branches: [main]
+    paths:
+      - "containers/app/**"
+      - ".github/workflows/application.yaml"
   # pull_request:
   #   branches: [main]
   schedule:
